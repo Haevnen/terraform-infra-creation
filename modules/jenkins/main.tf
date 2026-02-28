@@ -4,8 +4,8 @@ resource "aws_security_group" "jenkins_sg" {
     vpc_id = var.vpc_id
 
     ingress {
-        from_port = 8081
-        to_port = 8081
+        from_port = 8080
+        to_port = 8080
         protocol = "tcp"
         cidr_blocks = var.allowed_cidr
     }
@@ -82,7 +82,7 @@ resource "aws_instance" "jenkins" {
   iam_instance_profile   = aws_iam_instance_profile.jenkins_profile.name
   vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
 
-  user_data = file("${path.module}/install_jenkins.sh")
+  user_data = base64encode(file("${path.module}/install_jenkins.sh"))
 
   tags = {
     Name = "Jenkins"
